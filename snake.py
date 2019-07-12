@@ -1,10 +1,11 @@
 """
 Snake is a short applications that uses numpy array to calculate possible snake moves on a grid box.
-The rules are: only forward moves are possile, the snake can't move backwards, it is allowed to
-take the same paths though. The aim is to visit every point in the box.
-The application calculates number of possible moves and takes random choice
-(both the direction and the amount of steps are random).
-The amount of steps equals the snakes length and can only be taken between positions with integer coordinates (x, y)
+The rules are: only forward moves are possible, the snake can't move backwards, it is allowed to
+take the same paths though. The aim is to visit every point (every coordinate) in the box.
+The application calculates number of possible moves and steps and takes random choices -
+both the direction and the amount of steps are random.
+The amount of steps during one move equals the snakes length and can only be taken between positions
+with integer coordinates (x, y)
 The result of calculation is returned and presented on a plot with matplotlib animation.
 Every run returns the total number of steps and moves.
 
@@ -125,24 +126,28 @@ def line_coordinates(coordinates=()):
     y_axis = np.linspace(y_point[0], y_point[1], num=num_of_points, dtype='int32')
     return x_axis, y_axis
 
-# ==================================
+# ========================================================================================
 
-rows = 50
-cols = 50
-s = snake(rows, cols, position=(0, 0))
+# Box parameters:
+rows = 10
+cols = 10
+start_position = (0,0)
+
+s = snake(rows, cols, position=start_position)
 
 print("\n Number of moves: ", s['num_of_moves'])
 print("Number of steps: ", s['num_of_steps'])
 
-plt.style.use('ggplot')
-# plt.rc('grid', linestyle='-')
-fig, ax = plt.subplots()
-ax.yaxis.set_major_locator(plt.NullLocator())
-ax.xaxis.set_major_formatter(plt.NullFormatter())
-ax.set(xlim=(-1, rows + 1), ylim=(-1, cols + 1))
-line, = ax.plot([], [], color='red', linewidth=4)
 
-# ======== Animation ================
+with plt.style.context('dark_background'):
+
+    fig, ax = plt.subplots()
+    ax.yaxis.set_major_locator(plt.NullLocator())
+    ax.xaxis.set_major_formatter(plt.NullFormatter())
+    ax.set(xlim=(-1, rows + 1), ylim=(-1, cols + 1))
+    line, = ax.plot([], [], color='white', linewidth=6)
+
+# ======== Animation ===================================
 
 def init():
     line.set_data([], [])
@@ -156,5 +161,6 @@ def animate(l):
 
 
 all_lines = s['plot_positions']
-ani = animation.FuncAnimation(fig, animate, all_lines, init_func=init, interval=50, repeat=False, blit=True)
+ani = animation.FuncAnimation(fig, animate, all_lines, init_func=init, interval=100, repeat=False, blit=True)
+# ani.save('basic_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
 plt.show()
