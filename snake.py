@@ -139,13 +139,13 @@ print("\n Number of moves: ", s['num_of_moves'])
 print("Number of steps: ", s['num_of_steps'])
 
 
-with plt.style.context('dark_background'):
+with plt.style.context('ggplot'):
 
     fig, ax = plt.subplots()
     ax.yaxis.set_major_locator(plt.NullLocator())
     ax.xaxis.set_major_formatter(plt.NullFormatter())
     ax.set(xlim=(-1, rows + 1), ylim=(-1, cols + 1))
-    line, = ax.plot([], [], color='white', linewidth=6)
+    line, = ax.plot([], [], color='red', linewidth=6)
 
 # ======== Animation ===================================
 
@@ -161,6 +161,6 @@ def animate(l):
 
 
 all_lines = s['plot_positions']
-ani = animation.FuncAnimation(fig, animate, all_lines, init_func=init, interval=100, repeat=False, blit=True)
+ani = animation.FuncAnimation(fig, animate, all_lines, init_func=init, interval=200, repeat=False, blit=True)
 # ani.save('basic_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
 plt.show()
