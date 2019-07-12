@@ -19,4 +19,4 @@ Every run returns the total number of steps and moves.
 
 rows, columns of the box - must be integers
 
-starting position: box coordinates (0, 0) - must be integers
+starting position: some box coordinates, e.g. (0, 0) - must be integers
