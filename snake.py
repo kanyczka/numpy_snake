@@ -31,6 +31,7 @@ def choose_direction(steps=[]):
 
 def choose_no_of_steps(move=(0,)):
     # random number of possible steps
+
     if move[1]:
         steps = random.randint(1, move[1])
     else:
@@ -39,7 +40,28 @@ def choose_no_of_steps(move=(0,)):
 
 
 def snake(rows=10, cols=10, position=(0, 0)):
-    # calculates all positions taken by random moves and steps
+    """
+        Creates a box with given rows and columns and calculates the path
+        that was taken to fill all box points. The function ends when all
+        points have been visited. Moves and steps are chosen randomly.
+
+        Parameters
+        ----------
+        rows : int, optional, default: 10
+
+        cols : int, optional, default: 10
+
+        position : tuple of integers in range position[0]: (0, row-1), position[1]: (0, col-1), optional, default: (0,0)
+
+
+        Returns:
+        --------
+        plot_positions : coordinates of all vectors that describe each move taken from one point to the next one
+
+        num_of_moves : total number of moves
+
+        num_of_steps : total number of steps (one move consists of possible range of steps
+    """
 
     box = np.zeros((rows, cols), dtype=int)
     row_position = position[0]
@@ -116,27 +138,20 @@ def snake(rows=10, cols=10, position=(0, 0)):
         if any_zeros[0].size == 0:
             move_possible = False
 
-    return {"plot_positions": plot_positions, "num_of_moves": num_of_moves, "num_of_steps": num_of_steps}
+    return plot_positions, num_of_moves, num_of_steps
 
-def line_coordinates(coordinates=()):
-    x_point = coordinates[0]
-    y_point = coordinates[1]
-    num_of_points = coordinates[2] + 1  # number of steps + 1
-    x_axis = np.linspace(x_point[0], x_point[1], num=num_of_points, dtype='int32')
-    y_axis = np.linspace(y_point[0], y_point[1], num=num_of_points, dtype='int32')
-    return x_axis, y_axis
-
-# ========================================================================================
+# =========================================================================================
 
 # Box parameters:
+
 rows = 10
 cols = 10
 start_position = (0,0)
 
-s = snake(rows, cols, position=start_position)
+plot_positions, num_of_moves, num_of_steps = snake(rows, cols, position=start_position)
 
-print("\n Number of moves: ", s['num_of_moves'])
-print("Number of steps: ", s['num_of_steps'])
+print("\n Number of moves: ", num_of_moves)
+print("Number of steps: ", num_of_steps)
 
 
 with plt.style.context('ggplot'):
@@ -147,7 +162,19 @@ with plt.style.context('ggplot'):
     ax.set(xlim=(-1, rows + 1), ylim=(-1, cols + 1))
     line, = ax.plot([], [], color='red', linewidth=6)
 
+
 # ======== Animation ===================================
+
+def line_coordinates(coordinates=()):
+    # changes plot positions into line coordinates
+
+    x_point = coordinates[0]
+    y_point = coordinates[1]
+    num_of_points = coordinates[2] + 1  # number of steps + 1
+    x_axis = np.linspace(x_point[0], x_point[1], num=num_of_points, dtype='int32')
+    y_axis = np.linspace(y_point[0], y_point[1], num=num_of_points, dtype='int32')
+    return x_axis, y_axis
+
 
 def init():
     line.set_data([], [])
@@ -160,7 +187,7 @@ def animate(l):
     return line,
 
 
-all_lines = s['plot_positions']
+all_lines = plot_positions
 ani = animation.FuncAnimation(fig, animate, all_lines, init_func=init, interval=200, repeat=False, blit=True)
 # ani.save('basic_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
 plt.show()
