@@ -13,7 +13,7 @@ Every run returns the total number of steps and moves.
 
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
+import os
 import random
 
 
@@ -39,7 +39,7 @@ def choose_no_of_steps(move=(0,)):
     return steps
 
 
-def snake(rows=10, cols=10, position=(0, 0)):
+def snake(rows=10, cols=10, position=(0, 0), verbose=False):
     """
         Creates a box with given rows and columns and calculates the path
         that was taken to fill all box points. The function ends when all
@@ -76,11 +76,10 @@ def snake(rows=10, cols=10, position=(0, 0)):
                       'steps_down': 'steps_up'}
     num_of_moves = 0
     num_of_steps = 0
-    print("Executing", end='')
+    if verbose:
+        print("Executing snake...")
 
     while move_possible:
-        print(".", end='')
-
         num_of_moves += 1
         possible_moves_names = ['steps_up', 'steps_down', 'steps_right', 'steps_left']
         max_steps_up = row_position
@@ -140,54 +139,36 @@ def snake(rows=10, cols=10, position=(0, 0)):
 
     return plot_positions, num_of_moves, num_of_steps
 
-# =========================================================================================
 
-# Box parameters:
-
-rows = 10
-cols = 10
-start_position = (0,0)
-
-plot_positions, num_of_moves, num_of_steps = snake(rows, cols, position=start_position)
-
-print("\n Number of moves: ", num_of_moves)
-print("Number of steps: ", num_of_steps)
+def array_to_file(array, outfile):
+    if isinstance(array, np.ndarray):
+        np.save(outfile, array)
+        return True
+    else:
+        raise ValueError("Not a numpy array")
 
 
-with plt.style.context('ggplot'):
-
-    fig, ax = plt.subplots()
-    ax.yaxis.set_major_locator(plt.NullLocator())
-    ax.xaxis.set_major_formatter(plt.NullFormatter())
-    ax.set(xlim=(-1, rows + 1), ylim=(-1, cols + 1))
-    line, = ax.plot([], [], color='red', linewidth=6)
+def array_from_file(outfile):
+    if os.path.isfile(outfile):
+        return np.load(outfile)
+    else:
+        raise FileNotFoundError("No such file found")
 
 
-# ======== Animation ===================================
+def plot_number_of_moves(array_of_runs):
+    array_of_runs_split = np.hsplit(array_of_runs, 2)
+    x = array_of_runs_split[0]
+    y = array_of_runs_split[1]
+    text_x = 2 / 3 * np.amax(x)
+    text_y = 4 / 5 * np.amax(y)
+    plt.rcParams["figure.figsize"] = (20, 10)
+    plt.plot(x, y)
+    plt.xlabel("NUMBER OF MOVES")
+    plt.ylabel("NUMBER OF OCCURENCES")
+    plt.title("1.000.000 RUNS EXAMPLES")
+    plt.text(text_x, text_y, 'The snake function ran 1 mln times on google colab.\n'
+                        'It took 50 minutes to execute it on GPU.\nOutput data was saved in an numpy array.\n'
+                        'Each run of the snake function appends to the list a number of moves to fill the box')
 
-def line_coordinates(coordinates=()):
-    # changes plot positions into line coordinates
+    return plt.plot(x, y)
 
-    x_point = coordinates[0]
-    y_point = coordinates[1]
-    num_of_points = coordinates[2] + 1  # number of steps + 1
-    x_axis = np.linspace(x_point[0], x_point[1], num=num_of_points, dtype='int32')
-    y_axis = np.linspace(y_point[0], y_point[1], num=num_of_points, dtype='int32')
-    return x_axis, y_axis
-
-
-def init():
-    line.set_data([], [])
-    return line,
-
-
-def animate(l):
-    x, y = line_coordinates(l)
-    line.set_data(x, y)
-    return line,
-
-
-all_lines = plot_positions
-ani = animation.FuncAnimation(fig, animate, all_lines, init_func=init, interval=200, repeat=False, blit=True)
-# ani.save('basic_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
-plt.show()
