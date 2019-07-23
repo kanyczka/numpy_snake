@@ -40,8 +40,8 @@ The output array with all the results is saved in _all_moves_arr.npy_<br>
 It seems, that the most frequent number of moves is around 150 - occured more than 8.000 times.<br>
 6000 times the application needed between 110 and 200 moves.
 
-The **least** moves the program needed - **42.**<br>
-The **most** moves to cover the box -  **794**
+The **minimum** number of moves the program needed - **42.**<br>
+The **maximum** number of moves done to cover the box -  **794**
 
 The graph below shows all 1 mln results:
 
