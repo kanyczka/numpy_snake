@@ -155,7 +155,7 @@ def array_from_file(outfile):
         raise FileNotFoundError("No such file found")
 
 
-def plot_number_of_moves(array_of_runs):
+def plot_number_of_moves(array_of_runs, text='', title='', save=False):
     array_of_runs_split = np.hsplit(array_of_runs, 2)
     x = array_of_runs_split[0]
     y = array_of_runs_split[1]
@@ -165,10 +165,11 @@ def plot_number_of_moves(array_of_runs):
     plt.plot(x, y)
     plt.xlabel("NUMBER OF MOVES")
     plt.ylabel("NUMBER OF OCCURENCES")
-    plt.title("1.000.000 RUNS EXAMPLES")
-    plt.text(text_x, text_y, 'The snake function ran 1 mln times on google colab.\n'
-                        'It took 50 minutes to execute it on GPU.\nOutput data was saved in an numpy array.\n'
-                        'Each run of the snake function appends to the list a number of moves to fill the box')
+    plt.title(title)
+    plt.text(text_x, text_y, text)
+    plt.plot(x,y)
+    if save:
+        plt.savefig(f"snake_plot.png")
+    plt.show()
 
-    return plt.plot(x, y)
 
