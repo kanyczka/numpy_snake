@@ -28,7 +28,9 @@ snake(rows, cols, position=start_position, verbose=True)
 ----
 - snake.py - function module
 - animate_snake.py - animation of all moves - _snake_red.mp4_ is an example of such animation
-- snake_run.py - short application which collects data and plots graph from many runs of the snake function (like the graph at the end of the page)
+- snake_run.py - short application which collects data and plots graph from given runs of the snake function (like the graph at the end of the page)
+- plot_1mln_runs.py - plotting results of 1 mln runs saved in a file (1mln_np_array_all.npy)
+- 1mln_np_array_all.npy - array with saved results of 1 mln runs of snake(10, 10, (0,0))
 ----
 After finishig the application I checked
 
@@ -36,12 +38,12 @@ After finishig the application I checked
 
 To find the answer I took the 10 x 10 dimention's array to collect data from 1 mln runs (_snake_run.py_).
 To calculate all 1 mln moves I used Google Colab's GPU. It took 50 minutes to execute and collect data.<br>
-The output array with all the results is saved in _all_moves_arr.npy_<br>
+The output array with all the results is saved in _1mln_np_array_all.npy_<br>
 It seems, that the most frequent number of moves is around 150 - occured more than 8.000 times.<br>
 6000 times the application needed between 110 and 200 moves.
 
-The **minimum** number of moves the program needed - **42.**<br>
-The **maximum** number of moves done to cover the box -  **794**
+The **minimum** number of moves the program needed were **42.**<br>
+The **maximum** number of moves done to cover the box were  **794**
 
 The graph below shows all 1 mln results:
 
