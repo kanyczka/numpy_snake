@@ -1,7 +1,6 @@
 import time
 import snake as sn
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 # Starting parameters:
@@ -15,26 +14,43 @@ moves_list = []   # number of moves needed to fill the box
 print("Counting... ")
 start_time = time.time()
 
+runs = 0
 for i in range(no_of_runs):
-  _, n_moves, _ = sn.snake(rows, cols, position=start_position, verbose=True)
-  moves_list.append(n_moves)
+    runs += 1
+    print(f"Run number: {runs}")
+    _, n_moves, _ = sn.snake(rows, cols, position=start_position, verbose=False)
+    moves_list.append(n_moves)
 
 end_time = time.time()
 executing_time = end_time - start_time
-print(f"Executing time of {no_of_runs} runs: ", executing_time)
+print(f"Executing time of {no_of_runs} runs in seconds: ", executing_time)
 
 
-# prepare array with number of moves and number of occurences
+# prepare array with all moves
 moves_arr = np.array(moves_list)
-np.sort(moves_arr)
-all_moves, counts = np.unique(moves_arr, return_counts=True)
-all_moves_arr = np.array(list(zip(all_moves, counts)))
-
+sorted_moves = np.sort(moves_arr)
 
 # save array to file
 arr_file_name = 'all_moves_arr.npy'
-sn.array_to_file(all_moves_arr, arr_file_name)
+sn.array_to_file(sorted_moves, arr_file_name)
 # saved_array = sn.array_from_file(arr_file_name)
+
+# prepare array with number of moves and number of occurences
+all_moves, counts = np.unique(sorted_moves, return_counts=True)
+all_moves_arr = np.array(list(zip(all_moves, counts)))
+
+# min
+print("Minimal number of moves: ", np.min(sorted_moves))
+# max
+print("Maximal number of moves: ", np.max(sorted_moves))
+# mean
+print("Mean: ", np.mean(sorted_moves))
+# median:
+print("Median: ", np.median(sorted_moves))
+# arithmetic variance
+print("Variance: ", np.var(sorted_moves))
+# arithmetic standard deviation
+print("Standard deviation: ", np.std(sorted_moves))
 
 
 # prepare data for plotting and plot
