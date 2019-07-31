@@ -42,8 +42,14 @@ The output array with all the results is saved in _1mln_np_array_all.npy_<br>
 It seems, that the most frequent number of moves is around 150 - occured more than 8.000 times.<br>
 6000 times the application needed between 110 and 200 moves.
 
-The **minimum** number of moves the program needed were **42.**<br>
-The **maximum** number of moves done to cover the box were  **794**
+The **minimum** number of moves to fill the box - **39**<br>
+The **maximum** number of moves to cover the box - **686**<br>
+
+- Mean:  169.58
+- Median:  161
+- Variance:  2812.4
+- Standard deviation: 53.03
+
 
 The graph below shows all 1 mln results:
 
