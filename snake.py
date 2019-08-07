@@ -10,33 +10,10 @@ The result of calculation is returned and presented on a plot with matplotlib an
 Every run returns the total number of steps and moves.
 
 """
-
 import numpy as np
 import matplotlib.pyplot as plt
 import os
 import random
-
-
-def choose_direction(steps=[]):
-    # random choice of possible direction: up, down, left, right
-
-    if len(steps) > 0:
-        steps = np.array(steps)
-        possible_moves = np.where(steps != 0)  # result is a tuple
-        step = np.random.choice(possible_moves[0])
-    else:
-        step = 0
-    return step
-
-
-def choose_no_of_steps(move=(0,)):
-    # random number of possible steps
-
-    if move[1]:
-        steps = random.randint(1, move[1])
-    else:
-        steps = 0
-    return steps
 
 
 def snake(rows=10, cols=10, position=(0, 0), verbose=False):
@@ -63,6 +40,15 @@ def snake(rows=10, cols=10, position=(0, 0), verbose=False):
         num_of_steps : total number of steps (one move consists of possible range of steps
     """
 
+    def choose_no_of_steps(move=(0,'')):
+        # random number of possible steps
+
+        if move[1]:
+            steps = random.randint(1, move[1])
+        else:
+            steps = 0
+        return steps
+
     box = np.zeros((rows, cols), dtype=int)
     row_position = position[0]
     col_position = position[1]
@@ -77,7 +63,7 @@ def snake(rows=10, cols=10, position=(0, 0), verbose=False):
     num_of_moves = 0
     num_of_steps = 0
     if verbose:
-        print("Executing snake...")
+        print("Executing snake... ")
 
     while move_possible:
         num_of_moves += 1
@@ -94,9 +80,9 @@ def snake(rows=10, cols=10, position=(0, 0), verbose=False):
             del possible_moves_names[index_to_delete]
 
         moves = list(zip(possible_moves_names, possible_moves_steps))
-
-        chosen_move = choose_direction(possible_moves_steps)
-        chosen_move = moves[chosen_move]
+        # choose move only from possible moves - possible_moves_steps != 0
+        moves = [possible_move for possible_move in moves if possible_move[1] != 0]
+        chosen_move = random.choice(moves)
         steps = choose_no_of_steps(chosen_move)
         num_of_steps += steps
 
@@ -136,6 +122,10 @@ def snake(rows=10, cols=10, position=(0, 0), verbose=False):
         any_zeros = np.where(box == 0)
         if any_zeros[0].size == 0:
             move_possible = False
+
+    if verbose:
+        print(f"Number of moves: {num_of_moves}")
+        print(f"Number of steps: {num_of_steps}")
 
     return plot_positions, num_of_moves, num_of_steps
 
